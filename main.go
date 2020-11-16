@@ -36,6 +36,24 @@ var ProductsHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Reque
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(payload))
 })
+var AddFeedbackHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){
+	var product Product
+	vars := mux.Vars(r)
+	slug := vars["slug"]
+
+	for _, p := range products {
+		if p.Slug == slug {
+			product = p
+		}
+	}
+	w.Header().Set("Content-Type", "application/json")
+	if product.Slug != "" {
+		payload, _ := json.Marshal(product)
+		w.Write([]byte(payload))
+	} else {
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+	}
+})
 
 func main() {
 	// Here we are instantiating the gorilla/mux router
@@ -47,9 +65,9 @@ func main() {
 	// /status - which we will call to make sure that our API is up and running
 	// /products - which will retrieve a list of products that the user can leave feedback on
 	// /products/{slug}/feedback - which will capture user feedback on products
-	r.Handle("/status", NotImplemented).Methods("GET")
-	r.Handle("/products", NotImplemented).Methods("GET")
-	r.Handle("/products/{slug}/feedback", NotImplemented).Methods("POST")
+	r.Handle("/status", StatusHandler).Methods("GET")
+	r.Handle("/products", ProductsHandler).Methods("GET")
+	r.Handle("/products/{slug}/feedback", AddFeedbackHandler).Methods("POST")
 	// We will setup our server so we can serve static assest like images, css from the /static/{file} route
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 	// Our application will run on port 8080. Here we declare the port and pass in our router.
