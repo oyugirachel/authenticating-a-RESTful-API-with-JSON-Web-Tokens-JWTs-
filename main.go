@@ -6,7 +6,7 @@ import (
 	"errors"
 	"github.com/auth0/go-jwt-middleware"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/gorilla/handlers"
+	//"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 	"net/http"
@@ -49,13 +49,13 @@ func main() {
 	jwtMiddleware := jwtmiddleware.New(jwtmiddleware.Options{
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
 			// Verify 'aud' claim
-			aud := "YOUR_API_IDENTIFIER"
+			aud := "https://dev-ecommerce100.us.auth0.com/"
 			checkAud := token.Claims.(jwt.MapClaims).VerifyAudience(aud, false)
 			if !checkAud {
 				return token, errors.New("Invalid audience.")
 			}
 			// Verify 'iss' claim
-			iss := "https://YOUR_DOMAIN/"
+			iss := "https:oyugiDev.com/"
 			checkIss := token.Claims.(jwt.MapClaims).VerifyIssuer(iss, false)
 			if !checkIss {
 				return token, errors.New("Invalid issuer.")
@@ -117,7 +117,7 @@ var AddFeedbackHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Re
 })
 func getPemCert(token *jwt.Token) (string, error) {
 	cert := ""
-	resp, err := http.Get("https://YOUR_DOMAIN/.well-known/jwks.json")
+	resp, err := http.Get("https://oyugiDev.com/.well-known/jwks.json")
 
 	if err != nil {
 		return cert, err

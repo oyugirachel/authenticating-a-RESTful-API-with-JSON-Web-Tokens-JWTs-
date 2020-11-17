@@ -1,4 +1,5 @@
 {
   "domain": "dev-ecommerce100.us.auth0.com",
-  "clientId": "DByUIVPvrrzEQaEFcAyHc603vKZhbYGH"
+  "clientId": "DByUIVPvrrzEQaEFcAyHc603vKZhbYGH",
+  "audience": "oyugiDev.com"
 }
